@@ -2,7 +2,9 @@
   <div class="login">
     <el-card class="card">
       <div class="title"><img src="../../assets/img/logo_index.png" alt=""></div>
-      <el-form :model="formdata" :rules="rules" ref="myForm" >
+      <!--el-form中的model属性绑定表单数据对象，el-form还需绑定rules规则-->
+      <el-form :model="formdata" :rules="rules" ref="myForm">
+        <!-- form-item  prop属性 绑定 下面表单组件的 字段名 -->
         <el-form-item prop="mobile">
           <el-input v-model="formdata.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
@@ -32,8 +34,8 @@ export default {
         mobile: '',
         code: '',
         agree: false
-      },
-      rules: {
+      }, // pattern 正则表达式
+      rules: { // required如果为true,就表示该字段必填...message:当不满足规定时显示提示信息
         mobile: [{ required: true, message: '请输入手机号' }, { pattern: /^1[3456789]\d{9}$/, message: '手机格式不正确' }],
         code: [{ required: true, message: '请输入验证码' }, { pattern: /^\d{6}$/, message: '验证码格式不正确' }],
         agree: [{ validator }]
