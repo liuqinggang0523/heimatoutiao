@@ -1,0 +1,75 @@
+<template>
+  <div class="login">
+    <el-card class="card">
+      <div class="title"><img src="../../assets/img/logo_index.png" alt=""></div>
+      <el-form :model="formdata" :rules="rules" ref="myForm" >
+        <el-form-item prop="mobile">
+          <el-input v-model="formdata.mobile" placeholder="请输入手机号"></el-input>
+        </el-form-item>
+        <el-form-item prop="code">
+          <el-input v-model="formdata.code" placeholder="请输入验证码" class="code" style="width:65%"></el-input>
+          <el-button type="info" style="float:right">获取验证码</el-button>
+        </el-form-item>
+        <el-form-item prop="agree">
+          <el-checkbox v-model="formdata.agree" >我同意该条款以及个人隐私政策</el-checkbox>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" style="width:100%" @click="login">登录</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    let validator = function (rule, value, callback) {
+      value ? callback() : callback(new Error('必须同意才能登录'))
+    }
+    return {
+      formdata: {
+        mobile: '',
+        code: '',
+        agree: false
+      },
+      rules: {
+        mobile: [{ required: true, message: '请输入手机号' }, { pattern: /^1[3456789]\d{9}$/, message: '手机格式不正确' }],
+        code: [{ required: true, message: '请输入验证码' }, { pattern: /^\d{6}$/, message: '验证码格式不正确' }],
+        agree: [{ validator }]
+      }
+    }
+  },
+  methods: {
+    login () {
+      this.$refs.myForm.validate(function (isOk) {
+        if (isOk) {
+          console.log('验证成功')
+        }
+      })
+    }
+  }
+}
+</script>
+
+<style lang='less' scoped>
+   .login{
+      background: url('../../assets/img/bgc.png');
+      height: 100vh;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .card{
+        width: 420px;
+        height: 350px;
+        .title{
+          text-align: center;
+          margin-bottom: 20px;
+          img {
+            height: 40px;
+          }
+        }
+      }
+}
+</style>
