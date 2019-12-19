@@ -44,9 +44,24 @@ export default {
   },
   methods: {
     login () {
-      this.$refs.myForm.validate(function (isOk) {
+      this.$refs.myForm.validate((isOk) => {
         if (isOk) {
-          console.log('验证成功')
+          this.$axios({
+            url: '/authorizations', // 请求地址,请求类型默认为get
+            method: 'post',
+            data: this.formdata // 请求类型
+          }).then(res => {
+            // 如果登陆成功,会返回给我们令牌token,然后把令牌存储到本地
+            localStorage.setItem('token', res.data.data.token)
+            // 跳转到主页
+            this.$router.push('/home')
+            console.log(res)
+          }).catch(() => {
+            this.$message({
+              type: 'warning',
+              message: '手机号或者验证码错误'
+            })
+          })
         }
       })
     }
