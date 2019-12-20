@@ -15,14 +15,15 @@
           </el-input>
           <i class="el-icon-message-solid"></i>
           <span>消息</span>
-          <img src="../../assets/img/avatar.jpg" alt="">
-          <el-dropdown>
-              <span>追梦人</span>
+          <!-- 利用三元表达式给图片一个默认地址,当获取不到用户的信息时就显示这个默认图片 -->
+          <img :src="userInfo.photo?userInfo.photo:defaultImg" alt="">
+          <el-dropdown @command="clickMenu">
+              <span>{{userInfo.name}}</span>
               <i class="el-icon-caret-bottom"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>个人信息</el-dropdown-item>
-              <el-dropdown-item>github</el-dropdown-item>
-              <el-dropdown-item>退出</el-dropdown-item>
+              <el-dropdown-item command='userInfo'>个人信息</el-dropdown-item>
+              <el-dropdown-item command='Git'>github</el-dropdown-item>
+              <el-dropdown-item command='logOut'>退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
 
@@ -33,7 +34,39 @@
 
 <script>
 export default {
+  data () {
+    return {
+      // 定义一个用户对象
+      userInfo: {},
+      // 将图片转换成一个变量
+      defaultImg: require('../../assets/img/avatar.jpg')
+    }
+  },
+  // 一进入页面就查询,利用生命周期的钩子函数去查询
+  created () {
+    let token = localStorage.getItem('token') // 获取用户令牌
+    this.$axios({
+      url: '/user/profile',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => {
+      this.userInfo = res.data.data
+      console.log(this.userInfo)
+    })
+  },
+  methods: {
+    clickMenu (command) {
+      if (command === 'userInfo') {
 
+      } else if (command === 'Git') {
+        window.location.href = 'https://github.com/'
+      } else {
+        localStorage.removeItem('token')
+        this.$router.push('/login')
+      }
+    }
+  }
 }
 </script>
 
