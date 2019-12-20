@@ -1,8 +1,9 @@
 <template>
     <el-row class="layout-header" type="flex" align="middle">
       <el-col :span='12' class="left"  type='flex' justify="center">
-          <i class="el-icon-s-fold" style="font-size:24px"></i>
-          <span>江苏传智播客教育科技股份有限公司</span>
+          <i class="el-icon-s-fold" style="font-size:20px">
+            <span>江苏传智播客教育科技股份有限公司</span>
+          </i>
       </el-col>
       <el-col :span='12' class="right">
         <el-row type='flex' justify="end" align="middle">
@@ -52,7 +53,6 @@ export default {
       }
     }).then((res) => {
       this.userInfo = res.data.data
-      console.log(this.userInfo)
     })
   },
   methods: {
@@ -76,10 +76,10 @@ export default {
     .left{
       i{
         color: #606266;
-      }
-      span {
-        color: #606266;
-        margin-left: 5px;
+        span {
+          color: #606266;
+          margin-left: 5px;
+        }
       }
     }
     .right {
