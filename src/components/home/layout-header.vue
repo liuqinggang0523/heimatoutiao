@@ -1,18 +1,17 @@
 <template>
-    <el-row type="flex" align="middle">
+    <el-row class="layout-header" type="flex" align="middle">
       <el-col :span='12' class="left"  type='flex' justify="center">
           <i class="el-icon-s-fold" style="font-size:24px"></i>
-        <span>江苏传智播客教育科技股份有限公司</span>
+          <span>江苏传智播客教育科技股份有限公司</span>
       </el-col>
       <el-col :span='12' class="right">
         <el-row type='flex' justify="end" align="middle">
           <!-- 输入框 -->
           <el-input
-            style="width:150px;margin-right:15px;margin-top:10px"
+            style="width:150px;margin-right:15px;margin-top:8px"
             size="mini"
             placeholder="请输入内容"
-            prefix-icon="el-icon-search"
-            v-model="input2">
+            prefix-icon="el-icon-search">
           </el-input>
           <i class="el-icon-message-solid"></i>
           <span>消息</span>
@@ -39,12 +38,31 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  .right {
-    img {
-      height: 30px;
-      width: 30px;
-      border-radius: 50%;
-      margin: 0 15px 0 15px;
+  .layout-header {
+    height: 60px;
+    .left{
+      i{
+        color: #606266;
+      }
+      span {
+        color: #606266;
+        margin-left: 5px;
+      }
+    }
+    .right {
+      i{
+        color: #606266;
+      }
+      span {
+        color: #606266;
+      }
+       img {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        margin: 0 15px 0 15px;
+
+      }
     }
   }
 </style>
