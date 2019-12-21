@@ -6,14 +6,14 @@
       <el-form :model="formdata" :rules="rules" ref="myForm">
         <!-- form-item  prop属性 绑定 下面表单组件的 字段名 -->
         <el-form-item prop="mobile">
-          <el-input v-model="formdata.mobile" placeholder="请输入手机号"></el-input>
+          <el-input prefix-icon="el-icon-user" v-model="formdata.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
         <el-form-item prop="code">
-          <el-input v-model="formdata.code" placeholder="请输入验证码" class="code" style="width:65%"></el-input>
+          <el-input prefix-icon="el-icon-phone" v-model="formdata.code" placeholder="请输入验证码" class="code" style="width:65%"></el-input>
           <el-button type="info" style="float:right">获取验证码</el-button>
         </el-form-item>
         <el-form-item prop="agree">
-          <el-checkbox v-model="formdata.agree" >我同意该条款以及个人隐私政策</el-checkbox>
+          <el-checkbox v-model="formdata.agree">我同意该条款以及个人隐私政策</el-checkbox>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" style="width:100%" @click="login">登录</el-button>
@@ -48,19 +48,14 @@ export default {
         if (isOk) {
           this.$axios({
             url: '/authorizations', // 请求地址,请求类型默认为get
-            method: 'post',
-            data: this.formdata // 请求类型
+            method: 'post', // 请求类型
+            data: this.formdata
           }).then(res => {
             // 如果登陆成功,会返回给我们令牌token,然后把令牌存储到本地
-            localStorage.setItem('token', res.data.data.token)
+            localStorage.setItem('token', res.data.token)
             // 跳转到主页
             this.$router.push('/home')
-            console.log(res)
-          }).catch(() => {
-            this.$message({
-              type: 'warning',
-              message: '手机号或者验证码错误'
-            })
+            // console.log(res)
           })
         }
       })

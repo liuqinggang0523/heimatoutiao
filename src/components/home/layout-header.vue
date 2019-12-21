@@ -45,14 +45,14 @@ export default {
   },
   // 一进入页面就查询,利用生命周期的钩子函数去查询
   created () {
-    let token = localStorage.getItem('token') // 获取用户令牌
+    // let token = localStorage.getItem('token') // 获取用户令牌
     this.$axios({
-      url: '/user/profile',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      url: '/user/profile'
+      // headers: {
+      //   Authorization: `Bearer ${token}`
+      // }
     }).then((res) => {
-      this.userInfo = res.data.data
+      this.userInfo = res.data
     })
   },
   methods: {
