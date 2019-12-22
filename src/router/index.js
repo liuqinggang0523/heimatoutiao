@@ -9,10 +9,14 @@ Vue.use(VueRouter)
 const routes = [{ path: '/', redirect: '/home' },
   {
     path: '/home',
+    name: 'home',
     component: Home,
-    childen: [{
+    children: [{
       path: '', // 二级路由地址什么都不写，代表默认跳转
       component: Homepage
+    }, {
+      path: 'comment',
+      component: () => import('../views/comment')
     }]
   }, {
     path: '/login',

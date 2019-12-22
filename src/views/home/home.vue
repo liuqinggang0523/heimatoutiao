@@ -1,6 +1,6 @@
 <template>
   <div>
-    二级路由容器
+    首页
   </div>
 </template>
 
