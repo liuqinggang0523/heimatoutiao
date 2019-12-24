@@ -64,7 +64,6 @@ export default {
         url: '/articles', // 参数page:当前页码数 per_page:每页显示个数
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
       }).then(res => {
-        console.log(res)
         this.commentList = res.data.results
         this.page.total = res.data.total_count // 评论总条数
         // this.loading = false

@@ -14,8 +14,11 @@ const routes = [{ path: '/', redirect: '/home' },
       path: '', // 二级路由地址什么都不写，代表默认跳转
       component: Homepage
     }, {
-      path: 'comment',
+      path: '/home/comment',
       component: () => import('../views/comment')
+    }, {
+      path: '/home/material',
+      component: () => import('../views/imgPage')
     }]
   }, {
     path: '/login',

@@ -18,7 +18,7 @@ axios.interceptors.request.use(function (config) {
 
 // 在响应数据之前处理失真的大数字
 axios.defaults.transformResponse = [function (data) {
-  return jsonBigInt.parse(data)
+  return data ? jsonBigInt.parse(data) : {}
 }]
 
 // 响应拦截器
