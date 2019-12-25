@@ -4,7 +4,7 @@
        <img src="../../assets/img/logo_admin.png" alt="">
      </div>
      <!-- 左侧到黄组件，开启路由 -->
-     <el-menu :router="true" mode="vertical"
+     <el-menu :router="true"
       :collapse-transition="false"
       :collapse="isOpen"
       background-color="#353b4e"
@@ -51,7 +51,7 @@
 export default {
   data () {
     return {
-      isOpen: true
+      isOpen: false
     }
   },
   methods: {

@@ -19,6 +19,9 @@ const routes = [{ path: '/', redirect: '/home' },
     }, {
       path: '/home/material',
       component: () => import('../views/imgPage')
+    }, {
+      path: '/home/articles',
+      component: () => import('../views/article')
     }]
   }, {
     path: '/login',
