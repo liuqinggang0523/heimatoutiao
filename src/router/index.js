@@ -14,14 +14,17 @@ const routes = [{ path: '/', redirect: '/home' },
       path: '', // 二级路由地址什么都不写，代表默认跳转
       component: Homepage
     }, {
-      path: '/home/comment',
+      path: '/home/comment', // 评论列表
       component: () => import('../views/comment')
     }, {
-      path: '/home/material',
+      path: '/home/material', // 素材管理
       component: () => import('../views/imgPage')
     }, {
-      path: '/home/articles',
+      path: '/home/articles', // 文章列表
       component: () => import('../views/article')
+    }, {
+      path: '/home/publish', // 发表文章
+      component: () => import('../views/publishArticle')
     }]
   }, {
     path: '/login',

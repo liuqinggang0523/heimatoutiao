@@ -4,7 +4,7 @@
        <template slot="title">文章列表</template>
     </bread-crumb>
     <el-form class="form">
-      <el-radio-group  v-model="articleSearch.status" @change="changeStatus">
+      <el-radio-group  v-model="articleSearch.status">
            <el-form-item label="文章状态:" class="status">
              <el-radio-button :label="5">全部</el-radio-button>
              <el-radio-button :label="0">草稿</el-radio-button>
@@ -13,8 +13,18 @@
              <el-radio-button :label="3">审核失败</el-radio-button>
            </el-form-item>
       </el-radio-group>
+      <!-- <el-radio-group  v-model="articleSearch.status" @change="changeStatus">
+           <el-form-item label="文章状态:" class="status">
+             <el-radio-button :label="5">全部</el-radio-button>
+             <el-radio-button :label="0">草稿</el-radio-button>
+             <el-radio-button :label="1">待审核</el-radio-button>
+             <el-radio-button :label="2">审核通过</el-radio-button>
+             <el-radio-button :label="3">审核失败</el-radio-button>
+           </el-form-item>
+      </el-radio-group> -->
       <el-form-item label="频道列表:">
-          <el-select v-model="articleSearch.channels_id" @change="changeStatus" placeholder="请输入频道">
+        <!-- 第二种方法 -->
+          <el-select v-model="articleSearch.channels_id" placeholder="请输入频道">
               <el-option
                 v-for="item in channels"
                 :key="item.id"
@@ -22,6 +32,15 @@
                 :value="item.id">
               </el-option>
           </el-select>
+          <!-- 第一种方法 -->
+          <!-- <el-select v-model="articleSearch.channels_id" @change="changeStatus" placeholder="请输入频道">
+              <el-option
+                v-for="item in channels"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+          </el-select> -->
       </el-form-item>
       <el-form-item label="时间选择:">
         <el-date-picker
@@ -33,6 +52,16 @@
          start-placeholder="开始日期"
          end-placeholder="结束日期">
         </el-date-picker>
+        <!-- 用监听组件的形式去实现搜索 -->
+        <!-- <el-date-picker
+        @change="changeStatus"
+        value-format="yyyy-MM-dd"
+        v-model="articleSearch.date"
+         type="daterange"
+         range-separator="至"
+         start-placeholder="开始日期"
+         end-placeholder="结束日期">
+        </el-date-picker> -->
       </el-form-item>
       <span style="color:#606266;font-size:14px">共找到{{total_count}}条符合条件的内容</span>
     </el-form>
@@ -164,9 +193,18 @@ export default {
       })
     }
   },
+  watch: { // 用深度监听的方法实现搜索
+    articleSearch: {
+      handler: function () { // handler固定写法
+        // 里面的this指向组件实例
+        this.getConditionArticle() // 直接用条件改变的方法
+      },
+      deep: true
+    }
+  },
   created () {
     this.getArticle({ page: 1, per_page: 10 }) // 获取文章列表
-    this.getChannels() // 获取文章状态
+    this.getChannels() // 获取文章频道
   }
 }
 </script>
