@@ -11,23 +11,27 @@
         <quill-editor placeholder="请输入内容" v-model="formData.content" style="height:300px"></quill-editor>
       </el-form-item>
       <el-form-item label="选择封面:" prop="cover" style="margin-top:130px">  <!-- 封面默认0张 -1:自动 0:不上传 1:一张 3:三张-->
-        <el-radio-group v-model="formData.cover.type">
+        <el-radio-group v-model="formData.cover.type" @change="changeType">
           <el-radio-button :label="1">单图</el-radio-button>
           <el-radio-button :label="3">三图</el-radio-button>
           <el-radio-button :label="0">无图</el-radio-button>
           <el-radio-button :label="-1">自动</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-upload
-         style="margin-left:80px"
-         class="upload-demo"
-         drag
-         action="https://jsonplaceholder.typicode.com/posts/"
-         multiple>
-         <i class="el-icon-upload"></i>
-         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-         <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-      </el-upload>
+      <el-row type="flex" class="cover-img">
+        <cover-img :list="formData.cover.images"></cover-img>
+        <!-- <el-upload
+           style="margin-left:80px"
+           class="upload-demo"
+           drag
+           action="https://jsonplaceholder.typicode.com/posts/"
+           multiple
+           v-for="(item,index) in formData.cover.images" :key="index">
+           <i class="el-icon-upload"></i>
+           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+           <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload> -->
+      </el-row>
       <el-form-item label="频道:" style="margin-top:30px" prop="channel_id">
         <el-select placeholder="请选择" v-model="formData.channel_id">
           <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -93,6 +97,15 @@ export default {
       }).then(res => {
         this.formData = res.data // 将数据赋值给本身的formData
       })
+    },
+    changeType () {
+      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+        this.formData.cover.images = []
+      } else if (this.formData.cover.type === 1) {
+        this.formData.cover.images = ['']
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', '']
+      }
     }
   },
   watch: {
@@ -110,16 +123,16 @@ export default {
           }
         }
       }
-    }, // 监听封面类型的改变
-    'formData.cover.type': function () { // 深度监听type值得变化
-      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
-        this.formData.cover.images = []
-      } else if (this.formData.cover.type === 1) {
-        this.formData.cover.images = ['']
-      } else if (this.formData.cover.type === 3) {
-        this.formData.cover.images = ['', '', '']
-      }
-    }
+    } // 监听封面类型的改变
+    // 'formData.cover.type': function () { // 深度监听type值得变化
+    //   if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+    //     this.formData.cover.images = []
+    //   } else if (this.formData.cover.type === 1) {
+    //     this.formData.cover.images = ['']
+    //   } else if (this.formData.cover.type === 3) {
+    //     this.formData.cover.images = ['', '', '']
+    //   }
+    // }
   },
   created () {
     this.getChannels() // 获取文章频道
@@ -129,6 +142,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+   .cover-img{
+     display: flex;
+     flex-wrap: wrap;
+   }
 </style>
