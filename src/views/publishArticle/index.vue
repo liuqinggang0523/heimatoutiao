@@ -8,9 +8,9 @@
         <el-input placeholder="请输入文章标题" v-model="formData.title"></el-input>
       </el-form-item>
       <el-form-item label="内容:" prop="content">
-        <el-input type="textarea" :rows="4" placeholder="请输入内容" v-model="formData.content"></el-input>
+        <quill-editor placeholder="请输入内容" v-model="formData.content" style="height:300px"></quill-editor>
       </el-form-item>
-      <el-form-item label="选择封面:" prop="cover">  <!-- 封面默认0张 -1:自动 0:不上传 1:一张 3:三张-->
+      <el-form-item label="选择封面:" prop="cover" style="margin-top:130px">  <!-- 封面默认0张 -1:自动 0:不上传 1:一张 3:三张-->
         <el-radio-group v-model="formData.cover.type">
           <el-radio-button :label="1">单图</el-radio-button>
           <el-radio-button :label="3">三图</el-radio-button>
@@ -65,32 +65,66 @@ export default {
       this.$axios({
         url: '/channels'
       }).then(res => {
-        console.log(res)
         this.channels = res.data.channels
       })
     },
     publishArticle (draft) { // 发布文章
       this.$refs.publishForm.validate((isOk) => {
-        if (isOk) {
+        if (isOk) { // 此时判断是发布文章还是修改文章
+          let { articleId } = this.$route.params // 获取动态路有参数
           this.$axios({ // 调用发布的接口
-            url: '/articles',
-            method: 'post',
+            url: articleId ? `/articles/${articleId}` : '/articles',
+            method: articleId ? 'put' : 'post',
             params: { draft }, // 参数draft:true或 alse  是否存为草稿（true 为草稿）
             data: this.formData
           }).then(res => {
-            console.log(res)
             this.$message({
               type: 'success',
-              message: '发布成功'
+              message: articleId ? '修改成功' : '发布成功'
             })
             this.$router.push('/home/articles')
           })
         }
       })
+    },
+    getArticleId (articleId) { // 通过id查询文章数据的方法
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(res => {
+        this.formData = res.data // 将数据赋值给本身的formData
+      })
+    }
+  },
+  watch: {
+    $route: function (to, from) { // 该方法在vue官网响应路由参数的变化里查看到
+      if (to.params.articleId) {
+        // 如果有to.params.articleId则表示修改
+      } else {
+        this.formData = { // 没有表示是发布，要清空输入框里内容，下拉菜单恢复默认值
+          channel_id: null, // 文章频道默认不选
+          tiele: '', // 文章标题
+          content: '', // 文章内容
+          cover: {
+            type: 0, // 封面默认0张 -1:自动 0:不上传 1:一张 3:三张
+            images: [] // 封面地址的数组
+          }
+        }
+      }
+    }, // 监听封面类型的改变
+    'formData.cover.type': function () { // 深度监听type值得变化
+      if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
+        this.formData.cover.images = []
+      } else if (this.formData.cover.type === 1) {
+        this.formData.cover.images = ['']
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', '']
+      }
     }
   },
   created () {
     this.getChannels() // 获取文章频道
+    let { articleId } = this.$route.params // 获取动态路有参数
+    articleId && this.getArticleId(articleId) // 如果id存在则执行这个查询数据的方法
   }
 }
 </script>

@@ -25,6 +25,9 @@ const routes = [{ path: '/', redirect: '/home' },
     }, {
       path: '/home/publish', // 发表文章
       component: () => import('../views/publishArticle')
+    }, {
+      path: '/home/publish/:articleId', // 修改文章，动态路由传id
+      component: () => import('../views/publishArticle')
     }]
   }, {
     path: '/login',

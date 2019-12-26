@@ -75,7 +75,7 @@
         </div>
       </div>
       <div class="right">
-        <el-button type="warning" icon="el-icon-edit" size="mini">编辑</el-button>
+        <el-button type="warning" icon="el-icon-edit" size="mini" @click="editArticle(item.id)">修改</el-button>
         <el-button type="danger" icon="el-icon-delete" size="mini" @click="delArticle(item.id)">删除</el-button>
       </div>
     </el-row>
@@ -141,6 +141,9 @@ export default {
     }
   },
   methods: {
+    editArticle (id) { // 修改文章
+      this.$router.push(`/home/publish/${id.toString()}`)
+    },
     delArticle (id) { // 删除文章
       this.$confirm('确定要删除该文章吗').then(() => {
         this.$axios({
