@@ -6,6 +6,7 @@ import coverImg from '../../public/cover-img/coverImg.vue'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import selectImg from '../../public/select-img'
 export default {
   install (Vue) {
     // 注册全局组件
@@ -14,5 +15,6 @@ export default {
     Vue.component('bread-crumb', breadcrumb) // 全局面包屑
     Vue.component('quill-editor', quillEditor)
     Vue.component('cover-img', coverImg) // 封面组件
+    Vue.component('select-img', selectImg) // 选择图片弹窗
   }
 }

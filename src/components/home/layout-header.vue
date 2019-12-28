@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventbus.js' // 引入事件公交车
 export default {
   data () {
     return {
@@ -45,17 +46,20 @@ export default {
   },
   // 一进入页面就查询,利用生命周期的钩子函数去查询
   created () {
-    // let token = localStorage.getItem('token') // 获取用户令牌
-    this.$axios({
-      url: '/user/profile'
-      // headers: {
-      //   Authorization: `Bearer ${token}`
-      // }
-    }).then((res) => {
-      this.userInfo = res.data
+    this.getUserInfo()
+    eventBus.$on('updateUserInfo', () => {
+      // 认为别人跟新了数据,自己也要跟新
+      this.getUserInfo()
     })
   },
   methods: {
+    getUserInfo () {
+      this.$axios({
+        url: '/user/profile'
+      }).then((res) => {
+        this.userInfo = res.data
+      })
+    },
     clickMenu (command) {
       if (command === 'userInfo') {
 

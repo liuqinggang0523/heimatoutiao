@@ -19,7 +19,7 @@
         </el-radio-group>
       </el-form-item>
       <el-row type="flex" class="cover-img">
-        <cover-img :list="formData.cover.images"></cover-img>
+        <cover-img :list="formData.cover.images" @selectImg="receiveImg"></cover-img>
         <!-- <el-upload
            style="margin-left:80px"
            class="upload-demo"
@@ -65,6 +65,13 @@ export default {
     }
   },
   methods: {
+    receiveImg (url, index) { // 接受子组件传过来的地址和下标
+      // this.formData.cover.images[index] = url 错误写法!!!
+      // 虽然vue.js是数据视图双向驱动,但是对于数组的检测变化不能通过下标来处理
+      this.formData.cover.images = this.formData.cover.images.map((item, i) => index === i ? url : item)
+      // 如果相等说明找到了要替换的图片地址
+      // 没找到则返回原来的图片地址
+    },
     getChannels () { // 获取文章频道
       this.$axios({
         url: '/channels'
@@ -75,7 +82,7 @@ export default {
     publishArticle (draft) { // 发布文章
       this.$refs.publishForm.validate((isOk) => {
         if (isOk) { // 此时判断是发布文章还是修改文章
-          let { articleId } = this.$route.params // 获取动态路有参数
+          let { articleId } = this.$route.params // 获取动态路由参数
           this.$axios({ // 调用发布的接口
             url: articleId ? `/articles/${articleId}` : '/articles',
             method: articleId ? 'put' : 'post',

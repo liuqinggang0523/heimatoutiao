@@ -33,12 +33,12 @@
               <i class="el-icon-s-custom"></i>
               <span> 粉丝管理</span>
             </template>
-           <el-menu-item index="picture">图文数据</el-menu-item>
-           <el-menu-item index="fansInfo">粉丝概况</el-menu-item>
-           <el-menu-item index="fanspicture">粉丝画像</el-menu-item>
-           <el-menu-item index="fansList">粉丝列表</el-menu-item>
+           <el-menu-item index="/home/picture">图文数据</el-menu-item>
+           <el-menu-item index="/home/fansInfo">粉丝概况</el-menu-item>
+           <el-menu-item index="/home/fanspicture">粉丝画像</el-menu-item>
+           <el-menu-item index="/home/fansList">粉丝列表</el-menu-item>
         </el-submenu>
-        <el-menu-item index="userInfo">
+        <el-menu-item index="/home/userInfo">
            <i class="el-icon-setting"></i>
            <span>账户信息</span>
         </el-menu-item>
