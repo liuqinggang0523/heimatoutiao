@@ -1,19 +1,16 @@
 <template>
    <div class="nav">
      <div class="title">
-       <img src="../../assets/img/logo_admin.png" alt="">
+       <img :src="collapse?smillImg:bigImg" alt="">
      </div>
      <!-- 左侧到黄组件，开启路由 -->
      <el-menu :router="true"
-      :collapse-transition="false"
-      :collapse="isOpen"
       background-color="#353b4e"
       text-color="#adafb5"
       active-text-color="skyblue"
-      style="border-right:none">
-       <el-row class="openOrClose" type="flex" justify="center">
-         <span @click="isClose">|||</span>
-       </el-row>
+      style="border-right:none"
+      :collapse='collapse'
+      :collapse-transition="false">
         <el-menu-item index="/home">
           <i class="el-icon-s-home"></i>
           <span>首页</span>
@@ -49,14 +46,11 @@
 
 <script>
 export default {
+  props: ['collapse'],
   data () {
     return {
-      isOpen: false
-    }
-  },
-  methods: {
-    isClose () {
-      this.isOpen = !this.isOpen
+      bigImg: require('../../assets/img/logo_admin.png'),
+      smillImg: require('../../assets/img/toutiao.png')
     }
   }
 }
@@ -68,9 +62,11 @@ export default {
      width: 220px;
      background-color:#353b4e;
      .title{
-       text-align: center;
        background-color:  #353b4e;
        padding: 10px 0;
+       img{
+         margin-left: 10px;
+       }
      }
      .openOrClose{
        color: #fff;

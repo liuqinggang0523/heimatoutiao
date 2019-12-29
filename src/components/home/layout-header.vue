@@ -1,9 +1,8 @@
 <template>
     <el-row class="layout-header" type="flex" align="middle">
       <el-col :span='12' class="left"  type='flex' justify="center">
-          <i class="el-icon-s-fold" style="font-size:20px">
-            <span>江苏传智播客教育科技股份有限公司</span>
-          </i>
+          <i :class="{'el-icon-s-unfold':collapse,'el-icon-s-fold':!collapse}" @click="isCollapse" style="font-size:24px"></i>
+           <span>江苏传智播客教育科技股份有限公司</span>
       </el-col>
       <el-col :span='12' class="right">
         <el-row type='flex' justify="end" align="middle">
@@ -41,7 +40,8 @@ export default {
       // 定义一个用户对象
       userInfo: {},
       // 将图片转换成一个变量
-      defaultImg: require('../../assets/img/avatar.jpg')
+      defaultImg: require('../../assets/img/avatar.jpg'),
+      collapse: false // 默认展开
     }
   },
   // 一进入页面就查询,利用生命周期的钩子函数去查询
@@ -53,6 +53,10 @@ export default {
     })
   },
   methods: {
+    isCollapse () { // 折叠或展开
+      this.collapse = !this.collapse
+      eventBus.$emit('changeCollapse')
+    },
     getUserInfo () {
       this.$axios({
         url: '/user/profile'
@@ -80,10 +84,10 @@ export default {
     .left{
       i{
         color: #606266;
-        span {
-          color: #606266;
-          margin-left: 5px;
-        }
+      }
+      span {
+        color: #606266;
+        margin-left: 10px;
       }
     }
     .right {

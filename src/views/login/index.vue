@@ -33,7 +33,7 @@ export default {
       formdata: {
         mobile: '',
         code: '',
-        agree: false
+        agree: true
       }, // pattern 正则表达式
       rules: { // required如果为true,就表示该字段必填...message:当不满足规定时显示提示信息
         mobile: [{ required: true, message: '请输入手机号' }, { pattern: /^1[3456789]\d{9}$/, message: '手机格式不正确' }],
