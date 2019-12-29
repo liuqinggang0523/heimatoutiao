@@ -58,17 +58,16 @@ export default {
       this.page.currentPage = newPage
       this.getComment() // 再次调用重新渲染
     },
-    getComment () {
+    async getComment () {
       this.loading = true
-      this.$axios({
+      let res = await this.$axios({
         url: '/articles', // 参数page:当前页码数 per_page:每页显示个数
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
-      }).then(res => {
-        this.commentList = res.data.results
-        this.page.total = res.data.total_count // 评论总条数
-        // this.loading = false
-        setTimeout(() => { this.loading = false }, 200)
       })
+      this.commentList = res.data.results
+      this.page.total = res.data.total_count // 评论总条数
+      // this.loading = false
+      setTimeout(() => { this.loading = false }, 200)
     },
     //  定义一个格式化布尔值的函数
     formatterBoolean (row, column, cellVaule, index) {
@@ -76,19 +75,17 @@ export default {
       return cellVaule ? '正常' : '关闭'
     },
     // 打开或者关闭评论函数方法
-    openOrcloseComment (row) {
+    async openOrcloseComment (row) {
       let mess = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`确定要${mess}评论吗, 是否继续?`, '提示', {
-      }).then(() => {
-        this.$axios({
-          url: '/comments/status',
-          method: 'put',
-          params: { article_id: row.id.toString() }, // 文章id
-          data: { allow_comment: !row.comment_status }
-        }).then(res => {
-          this.getComment() // 修改完评论状态后重新渲染页面
-        })
+      await this.$confirm(`确定要${mess}评论吗, 是否继续?`, '提示', {
       })
+      await this.$axios({
+        url: '/comments/status',
+        method: 'put',
+        params: { article_id: row.id.toString() }, // 文章id
+        data: { allow_comment: !row.comment_status }
+      })
+      this.getComment() // 修改完评论状态后重新渲染页面
     }
   },
   // 渲染页面

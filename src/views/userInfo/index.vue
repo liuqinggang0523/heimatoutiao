@@ -39,7 +39,7 @@ export default {
         photo: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入用户名' }, { min: 2, max: 8, message: '2-8个字符' }],
+        name: [{ required: true, message: '请输入用户名' }, { min: 1, max: 8, message: '1-8个字符' }],
         email: [{ required: true, message: '请输入邮箱' }, { pattern: /^([a-zA-Z]|[0-9])(\w|-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/, message: '邮箱格式不正确' }],
         intor: [{ min: 10, message: '10个字符以上' }]
       },
@@ -47,43 +47,39 @@ export default {
     }
   },
   methods: {
-    saveUserInfo () { // 修改用户信息
-      this.$refs.myForm.validate().then(res => {
-        this.$axios({
-          url: '/user/profile',
-          method: 'patch',
-          data: this.userInfo
-        }).then(res => {
-          this.$message({
-            type: 'success',
-            message: '保存用户信息成功'
-          })// 此时认为保存成功,通知header组件更新头像和用户名
-          eventBus.$emit('updateUserInfo')
-        })
+    async saveUserInfo () { // 修改用户信息
+      await this.$refs.myForm.validate()
+      await this.$axios({
+        url: '/user/profile',
+        method: 'patch',
+        data: this.userInfo
       })
+      this.$message({
+        type: 'success',
+        message: '保存用户信息成功'
+      })// 此时认为保存成功,通知header组件更新头像和用户名
+      eventBus.$emit('updateUserInfo')
     },
-    getUserInfo () { // 获取用户资料信息
-      this.$axios({
+    async getUserInfo () { // 获取用户资料信息
+      let res = await this.$axios({
         url: '/user/profile'
-      }).then(res => {
-        this.userInfo = res.data
       })
+      this.userInfo = res.data
     },
-    uploadUserPhoto (params) { // 上传用户头像
+    async uploadUserPhoto (params) { // 上传用户头像
       let data = new FormData()
       data.append('photo', params.file)
-      this.$axios({
+      let res = await this.$axios({
         url: '/user/photo',
         method: 'patch',
         data
-      }).then(res => {
-        this.userInfo.photo = res.data.photo
-        this.$message({
-          type: 'success',
-          message: '用户头像上传成功'
-        })
-        eventBus.$emit('updateUserInfo')
       })
+      this.userInfo.photo = res.data.photo
+      this.$message({
+        type: 'success',
+        message: '用户头像上传成功'
+      })
+      eventBus.$emit('updateUserInfo')
     }
   },
   created () {

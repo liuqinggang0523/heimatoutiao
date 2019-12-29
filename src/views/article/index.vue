@@ -91,6 +91,7 @@
 </template>
 
 <script>
+// import { getArticles } from '../../actions/article.js'
 export default {
   data () {
     return {
@@ -144,19 +145,17 @@ export default {
     editArticle (id) { // 修改文章
       this.$router.push(`/home/publish/${id.toString()}`)
     },
-    delArticle (id) { // 删除文章
-      this.$confirm('确定要删除该文章吗').then(() => {
-        this.$axios({
-          url: `/articles/${id.toString()}`,
-          method: 'delete'
-        }).then(res => {
-          this.$message({
-            type: 'success',
-            message: '删除成功'
-          })
-          this.getConditionArticle()
-        })
+    async delArticle (id) { // 删除文章
+      await this.$confirm('确定要删除该文章吗')
+      await this.$axios({
+        url: `/articles/${id.toString()}`,
+        method: 'delete'
       })
+      this.$message({
+        type: 'success',
+        message: '删除成功'
+      })
+      this.getConditionArticle()
     },
     changeStatus () { // 搜索文章
       this.page.currentPage = 1
@@ -177,23 +176,20 @@ export default {
       }
       this.getArticle(params)
     },
-    getArticle (params) { // 获取文章信息
-      this.$axios({
+    async getArticle (params) { // 获取文章信息
+      let res = await this.$axios({
         params,
         url: '/articles'
-      }).then(res => {
-        this.page.total = res.data.total_count
-        this.total_count = res.data.total_count
-        this.articleList = res.data.results
       })
+      this.page.total = res.data.total_count
+      this.total_count = res.data.total_count
+      this.articleList = res.data.results
     },
-    getChannels () { // 获取文章频道
-      this.$axios({
+    async getChannels () { // 获取文章频道
+      let res = await this.$axios({
         url: '/channels'
-      }).then(res => {
-        // console.log(res)
-        this.channels = res.data.channels
       })
+      this.channels = res.data.channels
     }
   },
   watch: { // 用深度监听的方法实现搜索

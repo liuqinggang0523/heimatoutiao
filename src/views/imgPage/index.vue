@@ -10,7 +10,12 @@
          <el-button type="primary">上传文件</el-button>
        </el-upload>
     </el-row>
-    <el-tabs v-model="activeName" type="card" @tab-click="changeTab">
+    <el-tabs v-model="activeName" type="card"
+     @tab-click="changeTab"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(225, 225, 225, 0.8)">
       <el-tab-pane label="所有图片" name="all"></el-tab-pane>
       <el-tab-pane label="收藏图片" name="collect"></el-tab-pane>
       <el-tab-pane label="备用图片" name="ready"></el-tab-pane>
@@ -18,11 +23,7 @@
     <div class="box">
       <el-card class="box1"
       v-for="(item,index) in list"
-      :key="index"
-      v-loading="loading"
-      element-loading-text="拼命加载中"
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(225, 225, 225, 0.8)">
+      :key="index">
         <img :src="item.url" alt="">
         <div class="bottom-box">
            <i @click="isCollect(item)" class="el-icon-star-on" :style="{color:item.is_collected?'red':'#000'}"></i>
@@ -56,38 +57,38 @@ export default {
     }
   },
   methods: {
-    delImg (id) {
-      this.$confirm('确定要删除图片吗').then(() => {
-        this.$axios({
-          method: 'delete',
-          url: `/user/images/${id}`
-        }).then(() => {
-          this.getImg()
-        })
+    async delImg (id) {
+      await this.$confirm('确定要删除图片吗')
+      await this.$axios({
+        method: 'delete',
+        url: `/user/images/${id}`
       })
+      this.$message({
+        type: 'success',
+        message: '删除成功'
+      })
+      this.getImg()
     },
-    isCollect (item) { // 点击收藏或取消收藏
-      this.$axios({
+    async isCollect (item) { // 点击收藏或取消收藏
+      await this.$axios({
         method: 'put',
         url: `/user/images/${item.id}`,
         data: { collect: !item.is_collected }
-      }).then(res => {
-        this.getImg()
       })
+      this.getImg()
     },
-    uploadImg (params) { // 上传图片方法
+    async uploadImg (params) { // 上传图片方法
       this.loading = true // 加载状态
       let data = new FormData()
       data.append('image', params.file) // 文件加入到参数中
-      this.$axios({
+      await this.$axios({
         url: '/user/images',
         method: 'post',
         data
-      }).then(res => {
-        this.getImg()
-        this.loading = false
-        // setTimeout(() => { this.loading = false }, 300)
       })
+      this.getImg()
+      this.loading = false
+      // setTimeout(() => { this.loading = false }, 300)
     },
     changePage (newPagae) { // 切换页码事件
       this.page.currentPage = newPagae
@@ -97,18 +98,16 @@ export default {
       this.page.currentPage = 1 // 切换tab标签栏时默认第一页
       this.getImg()
     },
-    getImg () { // 获取素材
+    async getImg () { // 获取素材
       // this.activeName === 'collect'
-      this.$axios({
+      let res = await this.$axios({
         url: '/user/images',
         params: { collect: this.activeName === 'collect', // 参数collect为false表示全部图片,true为收藏图片
           page: this.page.currentPage,
           per_page: this.page.pageSize }
-      }).then(res => {
-        console.log(res)
-        this.list = res.data.results
-        this.page.total = res.data.total_count // 素材总个数
       })
+      this.list = res.data.results
+      this.page.total = res.data.total_count // 素材总个数
     }
   },
   created () {

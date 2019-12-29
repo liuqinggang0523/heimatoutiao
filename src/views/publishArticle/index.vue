@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { getChannels } from '../../actions/article.js'
 export default {
   data () {
     return {
@@ -72,12 +73,9 @@ export default {
       // 如果相等说明找到了要替换的图片地址
       // 没找到则返回原来的图片地址
     },
-    getChannels () { // 获取文章频道
-      this.$axios({
-        url: '/channels'
-      }).then(res => {
-        this.channels = res.data.channels
-      })
+    async getChannels () { // 获取文章频道
+      let res = await getChannels()
+      this.channels = res.data.channels
     },
     publishArticle (draft) { // 发布文章
       this.$refs.publishForm.validate((isOk) => {
@@ -98,12 +96,11 @@ export default {
         }
       })
     },
-    getArticleId (articleId) { // 通过id查询文章数据的方法
-      this.$axios({
+    async getArticleId (articleId) { // 通过id查询文章数据的方法
+      let res = await this.$axios({
         url: `/articles/${articleId}`
-      }).then(res => {
-        this.formData = res.data // 将数据赋值给本身的formData
       })
+      this.formData = res.data // 将数据赋值给本身的formData
     },
     changeType () {
       if (this.formData.cover.type === 0 || this.formData.cover.type === -1) {
