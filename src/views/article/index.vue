@@ -91,7 +91,7 @@
 </template>
 
 <script>
-// import { getArticles } from '../../actions/article.js'
+import { getArticles, getChannels } from '../../actions/article.js'
 export default {
   data () {
     return {
@@ -177,18 +177,13 @@ export default {
       this.getArticle(params)
     },
     async getArticle (params) { // 获取文章信息
-      let res = await this.$axios({
-        params,
-        url: '/articles'
-      })
+      let res = await getArticles(params)
       this.page.total = res.data.total_count
       this.total_count = res.data.total_count
       this.articleList = res.data.results
     },
     async getChannels () { // 获取文章频道
-      let res = await this.$axios({
-        url: '/channels'
-      })
+      let res = await getChannels()
       this.channels = res.data.channels
     }
   },

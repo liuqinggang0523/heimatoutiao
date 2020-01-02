@@ -33,7 +33,7 @@ const routes = [{ path: '/', redirect: '/home' },
       path: '/home/publish/:articleId', // 修改文章，动态路由传id
       component: () => import('../views/publishArticle')
     }, {
-      path: '/home/userInfo', // 修改文章，动态路由传id
+      path: '/home/userInfo', // 个人账户信息
       component: () => import('../views/userInfo')
     }]
   }, {

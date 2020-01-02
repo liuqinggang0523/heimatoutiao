@@ -3,7 +3,7 @@
     <bread-crumb slot="header">
        <template slot="title">用户管理</template>
     </bread-crumb>
-    <el-form label-width="100px" style="padding-left:30px" :model="userInfo" :rules="rules" ref="myForm">
+    <el-form  label-width="100px" style="padding-left:30px" :model="userInfo" :rules="rules" ref="myForm">
       <el-form-item label="用户名:" prop="name">
         <el-input style="width:50%" v-model="userInfo.name" placeholder="请输入用户名"></el-input>
       </el-form-item>
@@ -20,7 +20,7 @@
         <el-button type="primary" @click="saveUserInfo">保存用户信息</el-button>
       </el-form-item>
     </el-form>
-    <el-upload :http-request="uploadUserPhoto" :show-file-list="false">
+    <el-upload action="" :http-request="uploadUserPhoto" :show-file-list="false">
       <img :src="userInfo.photo?userInfo.photo:defaultImg" alt="">
     </el-upload>
   </el-card>
